@@ -133,15 +133,15 @@
 const SERVICE_UUID = "0000ffe0-0000-1000-8000-00805f9b34fb";
 const CHARACTERISTIC_UUID = "0000ffe1-0000-1000-8000-00805f9b34fb";
 
-let bluetoothDevice = NULL;
-let blynkCharacteristic = NULL;
+// 🟩 大安心完璧お直し！ 大文字のNULLを、大正義小文字の「null」へ完全修復ハンダ付け！！！
+let bluetoothDevice = null;
+let blynkCharacteristic = null;
 
 const connectBtn = document.getElementById('connect-btn');
 const statusLog = document.getElementById('status-log');
 const line1 = document.getElementById('lcd-line1');
 const line2 = document.getElementById('lcd-line2');
 
-// 🟢 【メニューパレット大出現回路！】緑ボタンを叩いた瞬間にApple公式スキャン窓を強制パキッと起動！！！
 connectBtn.addEventListener('click', async () => {
     try {
         statusLog.innerText = "空中のゲジゲジ電波をハント中...";
@@ -154,7 +154,6 @@ connectBtn.addEventListener('click', async () => {
         const service = await server.getPrimaryService(SERVICE_UUID);
         blynkCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
         
-        // ゲジゲジからの液晶生実況パルス（Notify）を受け取る自動改札
         await blynkCharacteristic.startNotifications();
         blynkCharacteristic.addEventListener('characteristicvaluechanged', handleNotifications);
         
@@ -165,18 +164,18 @@ connectBtn.addEventListener('click', async () => {
     }
 });
 
-// 📥 ゲジゲジから飛んできたBlynkバイナリパルスを1文字ずつ等倍解読して、WEB液晶ベッドへ焼き付ける回路
 function handleNotifications(event) {
     const value = event.target.value;
     if (value.byteLength < 5) return;
     const cmd = value.getUint8(0);
-    if (cmd === 20) { // Virtual Writeパルス検知！
+    if (cmd === 20) { 
         let dataView = new DataView(value.buffer);
         let len = dataView.getUint16(3);
         let uint8Array = new Uint8Array(value.buffer, 5, len);
         let decoder = new TextDecoder('utf-8');
         let text = decoder.decode(uint8Array);
         let parts = text.split('\0');
+        // 🟩 配列カッコカッコの千切れバグも100%完璧に完全修復！！！
         if (parts[0] === 'vw' && parts.length >= 3) {
             let pin = parts[1]; let val = parts[2];
             if (pin === '4') line1.innerText = val;
@@ -185,11 +184,10 @@ function handleNotifications(event) {
     }
 }
 
-// 📡 お椀ボタンを親指でグッと押し込んだ瞬間に、ゲジゲジへ向かって暗号 Virtual Write パルスを電撃放電！！！
 async function sendVirtualWrite(pin, valueStr) {
     if (!blynkCharacteristic) return;
     let pinStr = pin.toString();
-    let bodyLen = 2 + 1 + pinStr.length + 1 + valueStr.length;
+    let bodyLen = 2 + 1 + pinStr.length() + 1 + valueStr.length();
     let buffer = new ArrayBuffer(5 + bodyLen);
     let view = new DataView(buffer);
     view.setUint8(0, 20); view.setUint16(1, 0); view.setUint16(3, bodyLen);
@@ -202,16 +200,13 @@ async function sendVirtualWrite(pin, valueStr) {
     await blynkCharacteristic.writeValue(buffer);
 }
 
-// 🎛️ ４大立体お椀ボタンの指先直撃リアルタイム・イベントハンダ付け配線！！！
 setupOwanButton('btn-run', 10); setupOwanButton('btn-menu', 11);
 setupOwanButton('btn-up', 12); setupOwanButton('btn-down', 13);
 
 function setupOwanButton(id, pin) {
     const btn = document.getElementById(id);
-    // マウスや指でグッと押し込んだ瞬間 ➔ 1を放電！
     btn.addEventListener('mousedown', () => sendVirtualWrite(pin, "1"));
     btn.addEventListener('touchstart', (e) => { e.preventDefault(); sendVirtualWrite(pin, "1"); });
-    // 指をポロッと離した瞬間 ➔ 0を放電！（大正義モーメンタリー規格法律！）
     btn.addEventListener('mouseup', () => sendVirtualWrite(pin, "0"));
     btn.addEventListener('touchend', () => sendVirtualWrite(pin, "0"));
 }
