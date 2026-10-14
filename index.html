@@ -362,3 +362,108 @@
 </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KONAHIKI MEISTER</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .lcd {
+      width: 320px;
+      margin: 0 auto 20px;
+      padding: 16px;
+      background: #203020;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .lcd-line {
+      height: 32px;
+      line-height: 32px;
+      font-size: 24px;
+      color: #7CFC00;
+      background: #102010;
+      margin: 6px 0;
+      border-radius: 4px;
+      font-family: monospace;
+      letter-spacing: 1px;
+      overflow: hidden;
+      white-space: pre;
+    }
+
+    button {
+      font-size: 18px;
+      padding: 12px 20px;
+      margin: 8px;
+      border: none;
+      border-radius: 8px;
+      background: #007aff;
+      color: white;
+    }
+
+    #status {
+      margin: 12px 0 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h1>KONAHIKI MEISTER</h1>
+
+  <div class="lcd">
+    <div id="lcd1" class="lcd-line">                </div>
+    <div id="lcd2" class="lcd-line">                </div>
+  </div>
+
+  <div id="status">未接続</div>
+
+  <button onclick="connectBLE()">接続</button>
+
+  <script>
+    let bleCharacteristic;
+
+    async function connectBLE() {
+      try {
+        const device = await navigator.bluetooth.requestDevice({
+          filters: [{ name: 'KONAHIKI_MEISTER_BLE' }],
+          optionalServices: ['0000ffe0-0000-1000-8000-00805f9b34fb']
+        });
+
+        const server = await device.gatt.connect();
+        const service = await server.getPrimaryService('0000ffe0-0000-1000-8000-00805f9b34fb');
+        bleCharacteristic = await service.getCharacteristic('0000ffe1-0000-1000-8000-00805f9b34fb');
+
+        await bleCharacteristic.startNotifications();
+        bleCharacteristic.addEventListener('characteristicvaluechanged', handleNotify);
+
+        document.getElementById('status').textContent = '接続済み';
+      } catch (e) {
+        document.getElementById('status').textContent = '接続失敗';
+        console.log(e);
+      }
+    }
+
+    function handleNotify(event) {
+      const value = new TextDecoder().decode(event.target.value);
+      const parts = value.split('\n');
+
+      document.getElementById('lcd1').textContent = (parts[0] || '').padEnd(16, ' ').slice(0, 16);
+      document.getElementById('lcd2').textContent = (parts[1] || '').padEnd(16, ' ').slice(0, 16);
+    }
+  </script>
+</body>
+</html>
