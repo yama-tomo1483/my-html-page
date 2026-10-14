@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KONAHIKI MEISTER コックピット</title>
     <style>
-        /* 👑 大将特注：全宇宙で一番男前な純製品仕様・漆黒更地ベース */
         body {
             background-color: #121212;
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -19,7 +18,6 @@
             padding: 20px;
             box-sizing: border-box;
         }
-
         .container {
             width: 100%;
             max-width: 400px;
@@ -27,8 +25,6 @@
             flex-direction: column;
             align-items: center;
         }
-
-        /* 👑 純製品仕様：純白の巨大名札タイトルロゴ */
         .title {
             font-size: 24px;
             font-weight: 900;
@@ -41,8 +37,6 @@
             padding-bottom: 5px;
             width: 100%;
         }
-
-        /* 👑 大大復活！！！超巨大化した深緑色の２行液晶ディスプレイベッド（1602液晶等倍シンクロ） */
         .lcd-display {
             background-color: #042404;
             border: 4px solid #333333;
@@ -53,22 +47,18 @@
             box-shadow: inset 0 0 15px rgba(0,0,0,0.9), 0 5px 15px rgba(0,0,0,0.5);
             margin-bottom: 35px;
         }
-
         .lcd-line {
-            font-family: "Courier New", Courier, monospace;
+            font-family: monospace;
             font-weight: bold;
             font-size: 24px;
             color: #00ff00;
-            text-shadow: 0 0 8px rgba(0,255,0,0.7);
+            text-shadow: 0 0 8px #00ff00;
             height: 30px;
             line-height: 30px;
             letter-spacing: 1px;
             white-space: pre;
         }
-
         #lcd-line1 { margin-bottom: 10px; }
-
-        /* 👑 ４連お椀モーメンタリーボタン（指で押している間だけ凹む立体３Ｄインフラ） */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -76,7 +66,6 @@
             width: 100%;
             margin-bottom: 40px;
         }
-
         .btn-owan {
             background: linear-gradient(135deg, #2c2c2c 0%, #1a1a1a 100%);
             border: 1px solid #444444;
@@ -95,34 +84,15 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.6), inset 0 4px 4px rgba(255,255,255,0.1), inset 0 -4px 4px rgba(0,0,0,0.6);
             transition: all 0.1s ease;
         }
-
-        /* 🟢 親指を離した瞬間に「スンッ…」とリアルに手前に飛び出して戻るお椀のバネ配線 */
         .btn-owan:active {
             box-shadow: 0 2px 4px rgba(0,0,0,0.8), inset 0 4px 8px rgba(0,0,0,0.8);
             transform: translateY(4px);
             color: #ffffff;
-        }/* 🟢 RUNボタンだけは最高に目立つ緑の放電枠エフェクト */
-        #btn-run {
-            border: 2px solid #00ff00;
-            color: #00ff00;
-            text-shadow: 0 0 5px rgba(0,255,0,0.5);
         }
-        #btn-run:active {
-            background: #004400;
-            color: #ffffff;
-        }
-
-        .btn-icon {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
-
-        .btn-label {
-            font-size: 12px;
-            letter-spacing: 1px;
-        }
-
-        /* 👑 大安心セキュリティ：無料のまま普通のSafariから無線の糸を電撃開通させる「🟢本機と通信開始」ボタン */
+        #btn-run { border: 2px solid #00ff00; color: #00ff00; }
+        #btn-run:active { background: #004400; }
+        .btn-icon { font-size: 28px; margin-bottom: 8px; }
+        .btn-label { font-size: 12px; letter-spacing: 1px; }
         .btn-connect {
             width: 100%;
             background: linear-gradient(135deg, #00aa00 0%, #006600 100%);
@@ -133,59 +103,118 @@
             font-weight: bold;
             color: #ffffff;
             cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.5), inset 0 2px 2px rgba(255,255,255,0.2);
-            transition: all 0.1s ease;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5);
             text-align: center;
         }
-
-        .btn-connect:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.6);
-            background: linear-gradient(135deg, #008800 0%, #004400 100%);
-        }
-
-        .status-text {
-            font-size: 12px;
-            color: #888888;
-            margin-top: 15px;
-            text-align: center;
-            letter-spacing: 1px;
-        }
+        .btn-connect:active { transform: translateY(2px); }
+        .status-text { font-size: 12px; color: #888888; margin-top: 15px; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- 👑 純白のオリジナル純製品タイトルロゴディスプレイ -->
     <div class="title">KONAHIKI MEISTER</div>
-
-    <!-- 👑 超巨大２行液晶ディスプレイベッド（V4部屋 ＆ V0部屋） -->
     <div class="lcd-display">
-        <div class="lcd-line" id="lcd-line1">LCD LINE 1 START</div>
-        <div class="lcd-line" id="lcd-line2">LCD LINE 2 START</div>
+        <div class="lcd-line" id="lcd-line1">READY FOR MILL  </div>
+        <div class="lcd-line" id="lcd-line2">  MILL SPEED : 5</div>
     </div>
-
-    <!-- 👑 ４連お椀型モーメンタリーボタン（以前あった太陽マーク等は完全引き算デリート！） -->
     <div class="grid-container">
-        <div class="btn-owan" id="btn-run">
-            <div class="btn-icon">🟩</div>
-            <div class="btn-label">RUN / HOLD</div>
-        </div>
-        <div class="btn-owan" id="btn-menu">
-            <div class="btn-icon">⚙️</div>
-            <div class="btn-label">MENU</div>
-        </div>
-        <div class="btn-owan" id="btn-up">
-            <div class="btn-icon">⇧</div>
-            <div class="btn-label">SPEED UP</div>
-        </div>
-        <div class="btn-owan" id="btn-down">
-            <div class="btn-icon">⇩</div>
-            <div class="btn-label">SPEED DOWN</div>
-        </div>
+        <div class="btn-owan" id="btn-run"><div class="btn-icon">🟩</div><div class="btn-label">RUN / HOLD</div></div>
+        <div class="btn-owan" id="btn-menu"><div class="btn-icon">⚙️</div><div class="btn-label">MENU</div></div>
+        <div class="btn-owan" id="btn-up"><div class="btn-icon">⇧</div><div class="btn-label">SPEED UP</div></div>
+        <div class="btn-owan" id="btn-down"><div class="btn-icon">⇩</div><div class="btn-label">SPEED DOWN</div></div>
     </div>
-
-    <!-- 👑 量産化の改札口：普通のSafariから1発大接続する大安心のアップル公式Web Bluetoothボタン -->
     <button class="btn-connect" id="connect-btn">🟢 本機と通信開始</button>
     <div class="status-text" id="status-log">ゲジゲジ無線電波のハント待機中法律...</div>
 </div>
+
+<script>
+// 🛜 大将特注：ゲジゲジの420行スケッチの暗号改札口と100万%シンクロ合体ちまうWeb Bluetooth心臓プログラム！！！
+const SERVICE_UUID = "0000ffe0-0000-1000-8000-00805f9b34fb";
+const CHARACTERISTIC_UUID = "0000ffe1-0000-1000-8000-00805f9b34fb";
+
+let bluetoothDevice = NULL;
+let blynkCharacteristic = NULL;
+
+const connectBtn = document.getElementById('connect-btn');
+const statusLog = document.getElementById('status-log');
+const line1 = document.getElementById('lcd-line1');
+const line2 = document.getElementById('lcd-line2');
+
+// 🟢 【メニューパレット大出現回路！】緑ボタンを叩いた瞬間にApple公式スキャン窓を強制パキッと起動！！！
+connectBtn.addEventListener('click', async () => {
+    try {
+        statusLog.innerText = "空中のゲジゲジ電波をハント中...";
+        bluetoothDevice = await navigator.bluetooth.requestDevice({
+            filters: [{ name: 'KONAHIKI_MEISTER_BLE' }],
+            optionalServices: [SERVICE_UUID]
+        });
+        
+        const server = await bluetoothDevice.gatt.connect();
+        const service = await server.getPrimaryService(SERVICE_UUID);
+        blynkCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+        
+        // ゲジゲジからの液晶生実況パルス（Notify）を受け取る自動改札
+        await blynkCharacteristic.startNotifications();
+        blynkCharacteristic.addEventListener('characteristicvaluechanged', handleNotifications);
+        
+        statusLog.innerText = "🟩 ２号機遠隔開通大成功法律！！！";
+        connectBtn.innerText = "🟢 本機と絶好調通信中";
+    } catch (error) {
+        statusLog.innerText = "エラー: " + error.message;
+    }
+});
+
+// 📥 ゲジゲジから飛んできたBlynkバイナリパルスを1文字ずつ等倍解読して、WEB液晶ベッドへ焼き付ける回路
+function handleNotifications(event) {
+    const value = event.target.value;
+    if (value.byteLength < 5) return;
+    const cmd = value.getUint8(0);
+    if (cmd === 20) { // Virtual Writeパルス検知！
+        let dataView = new DataView(value.buffer);
+        let len = dataView.getUint16(3);
+        let uint8Array = new Uint8Array(value.buffer, 5, len);
+        let decoder = new TextDecoder('utf-8');
+        let text = decoder.decode(uint8Array);
+        let parts = text.split('\0');
+        if (parts[0] === 'vw' && parts.length >= 3) {
+            let pin = parts[1]; let val = parts[2];
+            if (pin === '4') line1.innerText = val;
+            if (pin === '0') line2.innerText = val;
+        }
+    }
+}
+
+// 📡 お椀ボタンを親指でグッと押し込んだ瞬間に、ゲジゲジへ向かって暗号 Virtual Write パルスを電撃放電！！！
+async function sendVirtualWrite(pin, valueStr) {
+    if (!blynkCharacteristic) return;
+    let pinStr = pin.toString();
+    let bodyLen = 2 + 1 + pinStr.length + 1 + valueStr.length;
+    let buffer = new ArrayBuffer(5 + bodyLen);
+    let view = new DataView(buffer);
+    view.setUint8(0, 20); view.setUint16(1, 0); view.setUint16(3, bodyLen);
+    let uint8View = new Uint8Array(buffer);
+    let index = 5;
+    uint8View[index++] = 'v'.charCodeAt(0); uint8View[index++] = 'w'.charCodeAt(0); uint8View[index++] = 0;
+    for (let i = 0; i < pinStr.length; i++) uint8View[index++] = pinStr.charCodeAt(i);
+    uint8View[index++] = 0;
+    for (let i = 0; i < valueStr.length; i++) uint8View[index++] = valueStr.charCodeAt(i);
+    await blynkCharacteristic.writeValue(buffer);
+}
+
+// 🎛️ ４大立体お椀ボタンの指先直撃リアルタイム・イベントハンダ付け配線！！！
+setupOwanButton('btn-run', 10); setupOwanButton('btn-menu', 11);
+setupOwanButton('btn-up', 12); setupOwanButton('btn-down', 13);
+
+function setupOwanButton(id, pin) {
+    const btn = document.getElementById(id);
+    // マウスや指でグッと押し込んだ瞬間 ➔ 1を放電！
+    btn.addEventListener('mousedown', () => sendVirtualWrite(pin, "1"));
+    btn.addEventListener('touchstart', (e) => { e.preventDefault(); sendVirtualWrite(pin, "1"); });
+    // 指をポロッと離した瞬間 ➔ 0を放電！（大正義モーメンタリー規格法律！）
+    btn.addEventListener('mouseup', () => sendVirtualWrite(pin, "0"));
+    btn.addEventListener('touchend', () => sendVirtualWrite(pin, "0"));
+}
+</script>
+</body>
+</html>
