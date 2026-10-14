@@ -58,8 +58,7 @@
             letter-spacing: 1px;
             white-space: pre;
         }
-        #lcd-line1 { margin-bottom: 10px; }
-        .grid-container {
+        #lcd-line1 { margin-bottom: 10px; }.grid-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 25px;
@@ -127,89 +126,3 @@
     <button class="btn-connect" id="connect-btn">🟢 本機と通信開始</button>
     <div class="status-text" id="status-log">ゲジゲジ無線電波のハント待機中法律...</div>
 </div>
-
-<script>
-// 🛜 大将特注：ゲジゲジの420行スケッチの暗号改札口と100万%シンクロ合体ちまうWeb Bluetooth心臓プログラム！！！
-const SERVICE_UUID = "0000ffe0-0000-1000-8000-00805f9b34fb";
-const CHARACTERISTIC_UUID = "0000ffe1-0000-1000-8000-00805f9b34fb";
-
-// 🟩 大安心完璧お直し！ 大文字のNULLを、大正義小文字の「null」へ完全修復ハンダ付け！！！
-let bluetoothDevice = null;
-let blynkCharacteristic = null;
-
-const connectBtn = document.getElementById('connect-btn');
-const statusLog = document.getElementById('status-log');
-const line1 = document.getElementById('lcd-line1');
-const line2 = document.getElementById('lcd-line2');
-
-connectBtn.addEventListener('click', async () => {
-    try {
-        statusLog.innerText = "空中のゲジゲジ電波をハント中...";
-        bluetoothDevice = await navigator.bluetooth.requestDevice({
-            filters: [{ name: 'KONAHIKI_MEISTER_BLE' }],
-            optionalServices: [SERVICE_UUID]
-        });
-        
-        const server = await bluetoothDevice.gatt.connect();
-        const service = await server.getPrimaryService(SERVICE_UUID);
-        blynkCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
-        
-        await blynkCharacteristic.startNotifications();
-        blynkCharacteristic.addEventListener('characteristicvaluechanged', handleNotifications);
-        
-        statusLog.innerText = "🟩 ２号機遠隔開通大成功法律！！！";
-        connectBtn.innerText = "🟢 本機と絶好調通信中";
-    } catch (error) {
-        statusLog.innerText = "エラー: " + error.message;
-    }
-});
-
-function handleNotifications(event) {
-    const value = event.target.value;
-    if (value.byteLength < 5) return;
-    const cmd = value.getUint8(0);
-    if (cmd === 20) { 
-        let dataView = new DataView(value.buffer);
-        let len = dataView.getUint16(3);
-        let uint8Array = new Uint8Array(value.buffer, 5, len);
-        let decoder = new TextDecoder('utf-8');
-        let text = decoder.decode(uint8Array);
-        let parts = text.split('\0');
-        // 🟩 配列カッコカッコの千切れバグも100%完璧に完全修復！！！
-        if (parts[0] === 'vw' && parts.length >= 3) {
-            let pin = parts[1]; let val = parts[2];
-            if (pin === '4') line1.innerText = val;
-            if (pin === '0') line2.innerText = val;
-        }
-    }
-}
-
-async function sendVirtualWrite(pin, valueStr) {
-    if (!blynkCharacteristic) return;
-    let pinStr = pin.toString();
-    let bodyLen = 2 + 1 + pinStr.length() + 1 + valueStr.length();
-    let buffer = new ArrayBuffer(5 + bodyLen);
-    let view = new DataView(buffer);
-    view.setUint8(0, 20); view.setUint16(1, 0); view.setUint16(3, bodyLen);
-    let uint8View = new Uint8Array(buffer);
-    let index = 5;
-    uint8View[index++] = 'v'.charCodeAt(0); uint8View[index++] = 'w'.charCodeAt(0); uint8View[index++] = 0;
-    for (let i = 0; i < pinStr.length; i++) uint8View[index++] = pinStr.charCodeAt(i);
-    uint8View[index++] = 0;
-    for (let i = 0; i < valueStr.length; i++) uint8View[index++] = valueStr.charCodeAt(i);
-    await blynkCharacteristic.writeValue(buffer);
-}
-
-setupOwanButton('btn-run', 10); setupOwanButton('btn-menu', 11);
-setupOwanButton('btn-up', 12); setupOwanButton('btn-down', 13);
-
-function setupOwanButton(id, pin) {
-    const btn = document.getElementById(id);
-    btn.addEventListener('mousedown', () => sendVirtualWrite(pin, "1"));
-    btn.addEventListener('touchstart', (e) => { e.preventDefault(); sendVirtualWrite(pin, "1"); });
-    btn.addEventListener('mouseup', () => sendVirtualWrite(pin, "0"));
-    btn.addEventListener('touchend', () => sendVirtualWrite(pin, "0"));
-}
-</script>
-</body>
-</html>
